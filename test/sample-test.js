@@ -1,19 +1,27 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { ethers } = require("hardhat")
+const { expect, assert } = require("chai")
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+describe("SimpleStorage", () => {
+  // Initializes in a outside scope
+  let simpleStorageFactory, simpleStorage
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+  // Code run before all the "it's"
+  beforeEach(async () => {
+    simpleStorageFactory = await ethers.getContractFactory("SimpleStorage")
+    simpleStorage = await simpleStorageFactory.deploy()
+  })
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+  it("Should start with a favorite number of 0", async () => {
+    const currentValue = await simpleStorage.retrieve()
+    const expectedValue = "0"
+    assert.equal(currentValue.toString(), expectedValue)
+  })
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
-  });
-});
+  it("Should update when call store", async () => {
+    const expectedValue = "7"
+    const transctionResponse = await simpleStorage.store(expectedValue)
+    await transctionResponse.wait(1)
+    const currentValue = await simpleStorage.retrieve()
+    assert.equal(currentValue.toString(), expectedValue)
+  })
+})
