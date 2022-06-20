@@ -15,10 +15,15 @@ const main = async () => {
     await verify(simpleStorage.address, [])
   }
 
-  const transctionResponse = await simpleStorage.store("7")
+  // const transctionResponse = await simpleStorage.store("7")
+  // await transctionResponse.wait(1)
+  // const currentValue = await simpleStorage.retrieve()
+  // console.log(currentValue.toString())
+
+  const transctionResponse = await simpleStorage.addPerson("Victor", "17")
   await transctionResponse.wait(1)
-  const currentValue = await simpleStorage.retrieve()
-  console.log(currentValue.toString())
+  const person = await simpleStorage.people("0")
+  console.log(person.name)
 }
 
 const verify = async (contractAddress, args) => {
