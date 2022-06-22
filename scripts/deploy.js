@@ -14,16 +14,6 @@ const main = async () => {
     await simpleStorage.deployTransaction.wait(6)
     await verify(simpleStorage.address, [])
   }
-
-  // const transctionResponse = await simpleStorage.store("7")
-  // await transctionResponse.wait(1)
-  // const currentValue = await simpleStorage.retrieve()
-  // console.log(currentValue.toString())
-
-  const transctionResponse = await simpleStorage.addPerson("Victor", "17")
-  await transctionResponse.wait(1)
-  const person = await simpleStorage.people("0")
-  console.log(person.name)
 }
 
 const verify = async (contractAddress, args) => {
